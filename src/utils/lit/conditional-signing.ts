@@ -159,6 +159,7 @@ export const conditionalSigning = async () => {
     return litActionSignatures;
   } catch (error) {
     console.error(error);
+    throw error;
   } finally {
     litNodeClient!.disconnect();
   }

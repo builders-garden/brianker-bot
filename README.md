@@ -1,6 +1,6 @@
-# 🤖 askbrian
+# 🤖 brianker bot
 
-this repository contains the code for the powerful **askbrian**.
+this repository contains the code for the powerful **brianker bot**.
 
 ## 📋 features
 
@@ -15,20 +15,20 @@ to install the bot, you need to follow these steps:
 1. clone the repository
 
 ```bash
-git clone https://github.com/builders-garden/askbrian.git
-cd askbrian
+git clone https://github.com/builders-garden/brianker-bot.git
+cd brianker-bot
 ```
 
 2. install the dependencies using your package manager of choice
 
 ```bash
+bun install # using bun
 npm install # using npm
 yarn install # using yarn
 pnpm install # using pnpm
-bun install # using bun
 ```
 
-3. copy the `.env.example` file to `.env` and fill in the required fields. check the **configuration** section below for more information
+1. copy the `.env.example` file to `.env` and fill in the required fields. check the **configuration** section below for more information
 
 ```bash
 cp .env.example .env
@@ -37,10 +37,10 @@ cp .env.example .env
 4. build and start the bot
 
 ```bash
+bun run build && bun run start # using bun
 npm run build && npm run start # using npm
 yarn build && yarn start # using yarn
 pnpm build && pnpm start # using pnpm
-bun run build && bun run start # using bun
 ```
 
 the bot should be running in the port of your choice (or `3000` if default).
@@ -49,9 +49,10 @@ in production enviroments it's better to use a process manager like **PM2** to k
 
 ```bash
 npm install -g pm2
+bun build && bun start --name brianker # using bun
 npm run build && pm2 start dist/index.js --name askbrian # using npm
 yarn build && pm2 start dist/index.js --name askbrian # using yarn
-pnpm build && pm2 start dist/index.js --name askbrian # using pnpm
+pnpm build && pm2 start dist/index.js --name brianker # using pnpm
 ```
 
 ## ⚙️ configuration

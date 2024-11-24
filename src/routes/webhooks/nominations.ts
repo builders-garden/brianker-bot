@@ -9,17 +9,18 @@ import { TransactionsDataType } from "../../utils/types.js";
 import { generateFrameDataPayload } from "../../utils/brian.js";
 import { saveBrianRequest } from "../../utils/turso.js";
 import { getOpenaiMessage } from "../../utils/openai.js";
+import { env } from "../../env.js";
 
 const logger = new Logger("nominationsHandler");
 
 const options = {
-  apiKey: process.env.BRIAN_API_KEY!,
+  apiKey: env.BRIAN_API_KEY!,
 };
 const brian = new BrianSDK(options);
 
-const farcasterFrameHandlerUrl = process.env.ASKBRIAN_FRAME_HANDLER_URL!;
+const farcasterFrameHandlerUrl = env.ASKBRIAN_FRAME_HANDLER_URL!;
 
-const regexPattern = /@askbrian/g;
+const regexPattern = /@brianker/g;
 
 function hasCauseProperty(error: any): error is { cause: { error?: string } } {
   return error && typeof error === "object" && "cause" in error;
