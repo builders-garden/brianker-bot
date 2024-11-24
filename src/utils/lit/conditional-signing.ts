@@ -121,7 +121,7 @@ export const conditionalSigning = async () => {
             method: "eth_getBalance",
             parameters: [":userAddress", "latest"],
             returnValueTest: {
-              comparator: ">=",
+              comparator: ">",
               value: "0",
             },
           },

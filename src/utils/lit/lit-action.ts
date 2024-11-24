@@ -10,7 +10,7 @@ const _litActionCode = async () => {
     });
 
     if (!testResult) {
-      LitActions.setResponse({ response: `address does not have 1 or more Wei on ${chain}` });
+      LitActions.setResponse({ response: `address does not have 0 Wei on ${chain}` });
       return;
     }
 
