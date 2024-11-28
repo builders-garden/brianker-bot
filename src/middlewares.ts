@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { env } from "@/env.js";
 import { createHmac } from "crypto";
-import { Logger } from "@/utils/logger.js";
+
+import { env } from "./env.js";
+import { Logger } from "./utils/logger.js";
 
 const logger = new Logger("middleware");
 

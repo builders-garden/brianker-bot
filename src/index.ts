@@ -1,8 +1,9 @@
-import { env } from "@/env.js";
 import express from "express";
-import { testsRouter, utilsRouter, webhooksRouter } from "@/routes/index.js";
 import slowDown from "express-slow-down";
-import { setupWebhook } from "@/utils/neynar.js";
+
+import { env } from "./env.js";
+import { setupWebhook } from "./utils/neynar.js";
+import { testsRouter, utilsRouter, webhooksRouter } from "./routes/index.js";
 
 export const app = express();
 

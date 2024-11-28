@@ -1,11 +1,12 @@
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { env } from "@/env.js";
 import {
   CastParamType,
   EmbeddedCast,
   User,
   type Conversation,
 } from "@neynar/nodejs-sdk/build/neynar-api/v2/index.js";
+
+import { env } from "../env.js";
 import { Logger } from "./logger.js";
 
 const logger = new Logger("neynarUtils");

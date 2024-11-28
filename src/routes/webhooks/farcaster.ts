@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Request, Response } from "express";
 import { HTTPError } from "ky";
 
-import { env } from "@/env.js";
+import { env } from "../../env.js";
 import {
   brianAgent,
   Logger,
@@ -10,8 +10,8 @@ import {
   replyWithError,
   replyWithSuccess,
   saveBrianRequest,
-} from "@/utils/index.js";
-import { Channel } from "@/schemas/index.js";
+} from "../../utils/index.js";
+import { Channel } from "../../schemas/index.js";
 
 const logger = new Logger("farcaster");
 const farcasterFrameHandlerUrl = env.BRIANKER_FRAME_HANDLER_URL!;

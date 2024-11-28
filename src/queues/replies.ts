@@ -1,10 +1,10 @@
 import { AxiosError } from "axios";
 import { MetricsTime, Queue, Worker } from "bullmq";
 
-import { Channel, type ReplyBody } from "@/schemas/index.js";
-import { Logger, publishCast } from "@/utils/index.js";
-import { env } from "@/env.js";
-import { redisConnection } from "@/queues/connection.js";
+import { env } from "../env.js";
+import { Channel, type ReplyBody } from "../schemas/index.js";
+import { Logger, publishCast } from "../utils/index.js";
+import { redisConnection } from "../queues/connection.js";
 
 const REPLIES_QUEUE_NAME = "replies";
 const logger = new Logger("replies-worker");

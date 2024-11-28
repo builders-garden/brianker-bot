@@ -1,5 +1,5 @@
-import { addToRepliesQueue } from "@/queues/index.js";
-import { Channel } from "@/schemas/index.js";
+import { Channel } from "../schemas/index.js";
+import { addToRepliesQueue } from "../queues/index.js";
 
 export const replyWithError = async (
   channel: Channel,

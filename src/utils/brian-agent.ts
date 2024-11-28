@@ -1,9 +1,10 @@
-import { env } from "@/env.js";
-import { createCryptoSchema } from "@/schemas/index.js";
 import { createBrianAgent } from "@brian-ai/langchain";
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { ChatOpenAI } from "@langchain/openai";
 import { z } from "zod";
+
+import { env } from "../env.js";
+import { createCryptoSchema } from "../schemas/index.js";
 
 const createCryptoTool = new DynamicStructuredTool({
   name: "create_segugio",

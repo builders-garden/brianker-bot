@@ -1,6 +1,7 @@
 import { createClient } from "redis";
-import { env } from "@/env.js";
-import { CastSender } from "@/schemas/index.js";
+
+import { env } from "../env.js";
+import { CastSender } from "../schemas/index.js";
 
 const redisConfig = {
   url: `redis://${env.REDIS_USERNAME}:${env.REDIS_PASSWORD}@${env.REDIS_HOST}:${env.REDIS_PORT}`,

@@ -1,4 +1,4 @@
-import { ReplyBody } from "@/schemas/index.js";
+import { ReplyBody } from "../schemas/index.js";
 import { processReply, repliesQueue } from "./replies.js";
 
 const REPLIES_JOB_NAME = "create-reply";

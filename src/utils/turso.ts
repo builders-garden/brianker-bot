@@ -1,13 +1,13 @@
-import { env } from "@/env.js";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 
+import { env } from "../env.js";
 import {
   BriankerRequest,
   briankerRequestsTable,
   Token,
   tokenTable,
-} from "@/schemas/index.js";
+} from "../schemas/index.js";
 
 export const tursoClient = createClient({
   url: env.TURSO_DATABASE_URL,
