@@ -8,7 +8,8 @@ import { createCryptoSchema } from "../schemas/index.js";
 
 const createCryptoTool = new DynamicStructuredTool({
   name: "create_segugio",
-  description: "this tool is used to create a crypto.",
+  description:
+    "this tool is used to create a new cryptocoin (or token) from a given name, ticker and imageUrl.",
   schema: createCryptoSchema,
   func: async ({
     name,

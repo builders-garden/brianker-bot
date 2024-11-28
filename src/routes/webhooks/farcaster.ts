@@ -71,10 +71,10 @@ export const farcasterHandler = async (req: Request, res: Response) => {
           return embed.metadata.html.ogImage[0].url;
         return null;
       })
-      .filter(Boolean);
+      .filter((url) => url !== null);
 
     logger.info(
-      `received cast ${hash} with text ${text} and images ${imageUrls?.join(", ")}`
+      `received cast ${hash} with text ${text} and images ${imageUrls.join(", ")}`
     );
 
     if (text.match(regexPattern) === null) {
@@ -103,7 +103,7 @@ export const farcasterHandler = async (req: Request, res: Response) => {
 
     try {
       const brianLangchainResponse = await brianAgent.invoke(
-        { input: text, address: originWallet, imageUrl: author.image_url },
+        { input: text, address: originWallet, imageUrl: imageUrls[0] },
         { configurable: { sessionId: originWallet } }
       );
       console.log("brianLangchainResponse", brianLangchainResponse);

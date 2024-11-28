@@ -2,12 +2,14 @@ import { z } from "zod";
 
 // https://js.langchain.com/docs/tutorials/extraction/
 export const createCryptoSchema = z.object({
-  name: z.string().describe("The name of the cryptocoin to create"),
-  ticker: z.string().describe("The ticker of the cryptocoin to create"),
+  name: z.string().describe("The name of the crypto to create"),
+  ticker: z.string().describe("The ticker of the crypto to create"),
   imageUrl: z
     .string()
     .url()
-    .describe("The image url of the cryptocoin to create"),
+    .nullish()
+    .describe("The image url to use for the crypto to create"),
+  // .default("https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/60026409-0a0f-47a1-c052-25043c02df00/original"),
   dateTime: z
     .string()
     .nullish()
