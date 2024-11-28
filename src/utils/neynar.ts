@@ -18,24 +18,29 @@ const webhookUrl = env.NEYNAR_WEBHOOK_TARGET_URL;
 const client = new NeynarAPIClient(env.NEYNAR_API_KEY as string);
 
 export const setupWebhook = async () => {
-  const createdWebhooks = await client.fetchWebhooks();
-  const webhook = createdWebhooks.webhooks.find(
-    (webhook) =>
-      webhook.title === webhookName && webhook.target_url === webhookUrl
-  );
-  if (webhook) {
-    logger.log(
-      `webhook already exists, using webhook with id ${webhook.webhook_id} and title ${webhook.title}`
+  try {
+    const createdWebhooks = await client.fetchWebhooks();
+    const webhook = createdWebhooks.webhooks.find(
+      (webhook) =>
+        webhook.title === webhookName && webhook.target_url === webhookUrl
     );
-    return {
-      success: true,
-      message: "webhook already exists",
-      webhook,
-    };
+    if (webhook) {
+      logger.log(
+        `webhook already exists, using webhook with id ${webhook.webhook_id} and title ${webhook.title}`
+      );
+      return {
+        success: true,
+        message: "webhook already exists",
+        webhook,
+      };
+    }
+    throw new Error(
+      "webhook does not exist - please create a new webhook before continuing."
+    );
+  } catch (error) {
+    logger.error(`Error setting up webhook: ${error}`);
+    throw error;
   }
-  throw new Error(
-    "webhook does not exist - please create a new webhook before continuing."
-  );
 };
 
 /**

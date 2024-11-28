@@ -25,6 +25,7 @@ export const briankerRequestsTable = sqliteTable("brianker_requests", {
   brianResponse: text("brian_response"),
   grokResponse: text("grok_response"),
   redisOperationId: text("redis_operation_id"),
+  tokenAddress: text("token_address").references(() => tokenTable.address),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });

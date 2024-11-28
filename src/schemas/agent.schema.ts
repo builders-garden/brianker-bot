@@ -18,4 +18,16 @@ export const createCryptoSchema = z.object({
     )
     // default to one hour from now
     .default(new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString()),
+  fid: z.number().describe("The fid of the user requesting the token"),
 });
+
+// https://js.langchain.com/docs/how_to/structured_output/
+export const responseFormatterSchema = z.object({
+  message: z.string().describe("The message to return to the user"),
+  tokenAddress: z
+    .string()
+    .optional()
+    .describe("The address of the token deployed"),
+});
+
+export type ResponseFormatterSchema = z.infer<typeof responseFormatterSchema>;

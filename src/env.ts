@@ -11,7 +11,6 @@ const envSchema = z.object({
     .transform((v) => parseInt(v)),
   // frame handler
   BRIANKER_FRAME_HANDLER_URL: z.string().url().trim().min(1),
-  // brian
   // redis
   REDIS_HOST: z.string().optional(),
   REDIS_PORT: z
