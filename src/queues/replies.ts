@@ -1,10 +1,10 @@
-import { MetricsTime, Queue, Worker } from "bullmq";
-import { ReplyBody } from "../schemas.js";
-import { env } from "../env.js";
-import { redisConnection } from "./connection.js";
 import { AxiosError } from "axios";
-import { publishCast } from "../utils/farcaster.js";
-import { Logger } from "../utils/logger.js";
+import { MetricsTime, Queue, Worker } from "bullmq";
+
+import { Channel, type ReplyBody } from "@/schemas/index.js";
+import { Logger, publishCast } from "@/utils/index.js";
+import { env } from "@/env.js";
+import { redisConnection } from "@/queues/connection.js";
 
 const REPLIES_QUEUE_NAME = "replies";
 const logger = new Logger("replies-worker");
@@ -15,16 +15,18 @@ const logger = new Logger("replies-worker");
  */
 export const processReply = async (job: { data: ReplyBody }) => {
   // @ts-ignore
-  const { text, replyTo, embeds }: ReplyBody = job.data;
+  const { text, replyTo, embeds, channel }: ReplyBody = job.data;
 
   logger.log(`new reply received. iterating.`);
-  logger.log(`reply text: ${text}`);
+  logger.log(`${channel} reply text: ${text}`);
 
-  const hash = await publishCast(text, {
-    embeds,
-    replyTo,
-  });
-  logger.log(`reply ${hash} published successfully .`);
+  if (channel === Channel.Farcaster) {
+    const hash = await publishCast(text, {
+      embeds,
+      replyTo,
+    });
+    logger.log(`reply ${hash} published successfully .`);
+  }
 };
 
 if (env.REDIS_HOST) {

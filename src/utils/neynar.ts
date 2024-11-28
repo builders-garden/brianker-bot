@@ -1,13 +1,14 @@
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { env } from "../env.js";
+import { env } from "@/env.js";
 import {
   CastParamType,
   EmbeddedCast,
   User,
+  type Conversation,
 } from "@neynar/nodejs-sdk/build/neynar-api/v2/index.js";
 import { Logger } from "./logger.js";
 
-const logger = new Logger("farcaster");
+const logger = new Logger("neynarUtils");
 
 const SIGNER_UUID = env.NEYNAR_SIGNER_UUID;
 const webhookName = env.NEYNAR_WEBHOOK_NAME;
@@ -157,4 +158,19 @@ export const getCastFromHash = async (castHash: string) => {
     castHash,
     CastParamType.Hash
   );
+};
+
+/**
+ * @dev this function returns the whole conversation from a cast hash
+ * @param {string} castHash the hash of the cast
+ * @returns {Promise<Conversation[]>} the conversation from the cast
+ */
+export const getConversationFromHash = async (
+  castHash: string
+): Promise<Conversation> => {
+  return await client.lookupCastConversation(castHash, CastParamType.Hash, {
+    replyDepth: 2,
+    includeChronologicalParentCasts: true,
+    limit: 20,
+  });
 };

@@ -50,8 +50,8 @@ in production enviroments it's better to use a process manager like **PM2** to k
 ```bash
 npm install -g pm2
 bun build && bun start --name brianker # using bun
-npm run build && pm2 start dist/index.js --name askbrian # using npm
-yarn build && pm2 start dist/index.js --name askbrian # using yarn
+npm run build && pm2 start dist/index.js --name brianker # using npm
+yarn build && pm2 start dist/index.js --name brianker # using yarn
 pnpm build && pm2 start dist/index.js --name brianker # using pnpm
 ```
 
@@ -70,9 +70,9 @@ this will allow the bot to connect to your Redis instance and start using the qu
 
 ## 📡 webhooks
 
-### `POST /webhooks/nominations`
+### `POST /webhooks/farcaster`
 
-this endpoint is used to receive the nominations from warpcast and to generate a tx from the cast.
+this endpoint is used to receive the mentions from warpcast and twitter and to generate a tx from the cast.
 
 ```
 

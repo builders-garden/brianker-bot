@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { BrianSDK } from "@brian-ai/sdk";
-import { env } from "../../env.js";
-import { Logger } from "../../utils/logger.js";
-import { TransactionsDataType } from "../../utils/types.js";
-import { generateFrameDataPayload } from "../../utils/brian.js";
-import { getOpenaiMessage } from "../../utils/openai.js";
+import { env } from "@/env.js";
+import { Logger } from "@/utils/logger.js";
 
 const logger = new Logger("testHandler");
 const options = {
@@ -12,7 +9,7 @@ const options = {
 };
 const brian = new BrianSDK(options);
 
-const regexPattern = /@askbrian/g;
+const regexPattern = /@brianker/g;
 
 export const chatHandler = async (req: Request, res: Response) => {
   try {
@@ -27,15 +24,15 @@ export const chatHandler = async (req: Request, res: Response) => {
 
     if (text.match(regexPattern) === null) {
       logger.error(
-        `No @askbrian mention found in the cast. received text - ${text}`
+        `No @brianker mention found in the cast. received text - ${text}`
       );
 
       return res.status(200).send({ status: "nok" });
     }
 
     const prompt =
-      text.indexOf("@askbrian") !== -1
-        ? text.slice(text.indexOf("@askbrian") + 10).trim()
+      text.indexOf("@brianker") !== -1
+        ? text.slice(text.indexOf("@brianker") + 10).trim()
         : "";
     logger.log(`user prompt for brian: ${prompt}`);
 
@@ -50,17 +47,7 @@ export const chatHandler = async (req: Request, res: Response) => {
       });
       logger.log(`brianResponse ${JSON.stringify(brianResponse)}`);
 
-      // Generate the frameData object
-      const frameData: TransactionsDataType = await generateFrameDataPayload(
-        brianResponse,
-        originWallet
-      );
-      logger.log(`frameData generated ${JSON.stringify(frameData)}`);
-
-      // Ask openai to generate a message for the frame
-      const openaiMessage = await getOpenaiMessage(frameData, text);
-
-      return res.status(200).send({ status: "ok", message: openaiMessage });
+      return res.status(200).send({ status: "ok", message: "ok briano" });
     } catch (error) {
       logger.error(`error asking brian: ${error}`);
     }

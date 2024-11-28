@@ -10,10 +10,8 @@ const envSchema = z.object({
     .default("3000")
     .transform((v) => parseInt(v)),
   // frame handler
-  ASKBRIAN_FRAME_HANDLER_URL: z.string().url().trim().min(1),
+  BRIANKER_FRAME_HANDLER_URL: z.string().url().trim().min(1),
   // brian
-  BRIAN_API_URL: z.string().url().trim().min(1),
-  BRIAN_API_KEY: z.string().trim().min(1),
   // redis
   REDIS_HOST: z.string().optional(),
   REDIS_PORT: z
@@ -31,8 +29,10 @@ const envSchema = z.object({
   // turso
   TURSO_DATABASE_URL: z.string().url().trim().min(1),
   TURSO_AUTH_TOKEN: z.string().trim().min(1),
-  // openai
-  OPENAI_API_BASE_URL: z.string().url().trim().min(1),
+  // brian
+  BRIAN_API_KEY: z.string().trim().min(1),
+  PRIVATE_KEY: z.string().trim().min(1),
+  GROK_API_KEY: z.string().trim().min(1),
   OPENAI_API_KEY: z.string().trim().min(1),
 });
 
