@@ -1,7 +1,7 @@
 import z from "zod";
 
 export enum CastSender {
-  BRIANKER = "brianker",
+  BRIANKER = "briannah",
 }
 
 export enum Channel {

@@ -1,6 +1,6 @@
-# 🤖 brianker bot
+# 🤖 briannah bot
 
-this repository contains the code for the powerful **brianker bot**.
+this repository contains the code for the powerful **briannah bot**.
 
 ## 📋 features
 

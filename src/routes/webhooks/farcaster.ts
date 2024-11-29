@@ -23,12 +23,12 @@ const brianSdk = new BrianSDK({
   apiKey: env.BRIAN_API_KEY,
 });
 
-const regexPattern = /@brianker/g;
+const regexPattern = /@briannah/g;
 
 export const farcasterHandler = async (req: Request, res: Response) => {
   const redisOperationId = uuidv4();
   try {
-    logger.log(`new cast with @brianker mention received.`);
+    logger.log(`new cast with @briannah mention received.`);
     const { data } = req.body;
 
     if (!data) {
@@ -65,11 +65,11 @@ export const farcasterHandler = async (req: Request, res: Response) => {
 
     if (text.match(regexPattern) === null) {
       logger.error(
-        `No @brianker mention found in the cast ${hash}. received text - ${text}`
+        `No @briannah mention found in the cast ${hash}. received text - ${text}`
       );
       saveBrianRequest({
         status: "nok",
-        errorMessage: `No @brianker mention found in the cast ${hash}.`,
+        errorMessage: `No @briannah mention found in the cast ${hash}.`,
         inputCast: data,
         brianInputOriginWallet: null,
         brianResponse: null,

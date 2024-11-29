@@ -10,7 +10,7 @@ const options = {
 };
 const brian = new BrianSDK(options);
 
-const regexPattern = /@brianker/g;
+const regexPattern = /@briannah/g;
 
 export const chatHandler = async (req: Request, res: Response) => {
   try {
@@ -25,15 +25,15 @@ export const chatHandler = async (req: Request, res: Response) => {
 
     if (text.match(regexPattern) === null) {
       logger.error(
-        `No @brianker mention found in the cast. received text - ${text}`
+        `No @briannah mention found in the cast. received text - ${text}`
       );
 
       return res.status(200).send({ status: "nok" });
     }
 
     const prompt =
-      text.indexOf("@brianker") !== -1
-        ? text.slice(text.indexOf("@brianker") + 10).trim()
+      text.indexOf("@briannah") !== -1
+        ? text.slice(text.indexOf("@briannah") + 10).trim()
         : "";
     logger.log(`user prompt for brian: ${prompt}`);
 
