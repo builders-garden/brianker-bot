@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+const defaultChains = [
+  "ethereum",
+  "mainnet",
+  "sepolia",
+  "base",
+  "baseSepolia",
+  "unichain",
+  "unichainSepolia",
+  "optimism",
+  "optimismSepolia",
+] as const;
+
 // https://js.langchain.com/docs/tutorials/extraction/
 export const createCryptoSchema = z.object({
   name: z.string().describe("The name of the crypto to create"),
@@ -19,6 +31,13 @@ export const createCryptoSchema = z.object({
     // default to one hour from now
     .default(new Date(Date.now() + 1 * 60 * 60 * 1000).toISOString()),
   fid: z.number().describe("The fid of the user requesting the token"),
+  chain: z
+    .enum(defaultChains)
+    .nullish()
+    .describe(
+      "The ethereum EVM chain to deploy the token on, if not provided, it will default to base"
+    )
+    .default("base"),
 });
 
 export type CreateCryptoSchema = z.infer<typeof createCryptoSchema>;
@@ -30,6 +49,13 @@ export const responseFormatterSchema = z.object({
     .string()
     .optional()
     .describe("The address of the token deployed"),
+  chain: z
+    .enum(defaultChains)
+    .nullish()
+    .describe(
+      "The ethereum EVM chain the token was deployed on, if not provided, it will default to base"
+    )
+    .default("base"),
 });
 
 export type ResponseFormatterSchema = z.infer<typeof responseFormatterSchema>;

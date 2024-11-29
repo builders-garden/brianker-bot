@@ -34,10 +34,11 @@ const createCryptoTool = new DynamicStructuredTool({
     imageUrl,
     dateTime,
     fid,
+    chain,
   }: CreateCryptoSchema) => {
     try {
       console.info(
-        `Creating coin ${name} ${ticker} ${imageUrl} ${dateTime} requested by fid ${fid}`
+        `Creating coin ${name} ${ticker} ${imageUrl} ${dateTime} requested by fid ${fid} on chain ${chain}`
       );
       const startTime = dateTime
         ? new Date(dateTime)
@@ -47,6 +48,7 @@ const createCryptoTool = new DynamicStructuredTool({
         name,
         symbol: ticker,
         startTime,
+        chain: chain || "baseSepolia",
       });
 
       if (!tokenAddress) throw new Error("Token contract not deployed");
@@ -58,6 +60,7 @@ const createCryptoTool = new DynamicStructuredTool({
         address: getAddress(tokenAddress),
         name,
         ticker,
+        chain: chain || "baseSepolia",
         requestedBy: JSON.stringify({
           fid: fid,
           username: "",
@@ -71,14 +74,14 @@ const createCryptoTool = new DynamicStructuredTool({
       return JSON.stringify({
         message: `Token ${name} (${ticker}) deployed successfully at ${tokenAddress}.`,
         tokenAddress: tokenAddress,
-        chain: "baseSepolia",
+        chain: chain || "baseSepolia",
       });
     } catch (error) {
       console.error(`Error creating coin ${name} ${ticker}: ${error}`);
       return JSON.stringify({
         message: `An error occurred while deploying the token ${name} (${ticker}).`,
         tokenAddress: null,
-        chain: "baseSepolia",
+        chain: chain || "baseSepolia",
       });
     }
   },

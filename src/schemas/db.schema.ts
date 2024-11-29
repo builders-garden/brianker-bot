@@ -6,6 +6,7 @@ export const tokenTable = sqliteTable("token", {
   address: text("address").unique().notNull(),
   name: text("name").notNull(),
   ticker: text("ticker").notNull(),
+  chain: text("chain").notNull().default("baseSepolia"),
   requestedBy: text("requestedBy").notNull(),
   image: text("image").notNull(),
   dateTime: text("date_time").notNull(), // date and time to allow the trading on the pool, converted to GMT time

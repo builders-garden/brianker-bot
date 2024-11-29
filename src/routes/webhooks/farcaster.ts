@@ -48,9 +48,9 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         .status(400)
         .send({ status: "nok", error: "No data received." });
     }
-    console.log("warpcast data", data);
 
     const { text, author, hash, embeds }: Cast = data;
+    console.log("warpcast data", text, author.fid, hash, embeds);
 
     // Send a success response to neynar so they don't retry
     res.status(200).send({ status: "ok" });
@@ -83,9 +83,7 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         redisOperationId,
         tokenAddress: null,
       });
-      return res
-        .status(400)
-        .send({ status: "nok", error: "No @briannah mention found." });
+      return;
     }
 
     // Getting the author's address
@@ -210,7 +208,7 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         tokenAddress: null,
       });
     }
-    return res.status(400).send({ status: "nok" });
+    return;
   }
 };
 

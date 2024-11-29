@@ -37,6 +37,7 @@ export const saveToken = async (
     address: token.address,
     name: token.name,
     ticker: token.ticker,
+    chain: token.chain,
     requestedBy: token.requestedBy,
     image: token.image,
     dateTime: token.dateTime,
