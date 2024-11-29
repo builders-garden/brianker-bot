@@ -43,11 +43,17 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         redisOperationId,
         tokenAddress: null,
       });
-      return res.status(200).send({ status: "nok" });
+
+      return res
+        .status(400)
+        .send({ status: "nok", error: "No data received." });
     }
     console.log("warpcast data", data);
 
     const { text, author, hash, embeds }: Cast = data;
+
+    // Send a success response to neynar so they don't retry
+    res.status(200).send({ status: "ok" });
 
     // Extract image URLs from embeds
     const imageUrls = embeds
@@ -77,7 +83,9 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         redisOperationId,
         tokenAddress: null,
       });
-      return res.status(200).send({ status: "nok" });
+      return res
+        .status(400)
+        .send({ status: "nok", error: "No @briannah mention found." });
     }
 
     // Getting the author's address
@@ -165,7 +173,7 @@ export const farcasterHandler = async (req: Request, res: Response) => {
       replyWithError(Channel.Farcaster, hash, errorMessage);
     }
 
-    return res.status(200).send({ status: "ok" });
+    return;
   } catch (error) {
     if (error instanceof HTTPError && error.name === "HTTPError") {
       const errorJson = await error.response.json();
@@ -202,7 +210,7 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         tokenAddress: null,
       });
     }
-    return res.status(200).send({ status: "nok" });
+    return res.status(400).send({ status: "nok" });
   }
 };
 
