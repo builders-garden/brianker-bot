@@ -1,6 +1,6 @@
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
-
+import { eq } from "drizzle-orm";
 import { env } from "../env.js";
 import {
   BriankerRequest,
@@ -41,4 +41,29 @@ export const saveToken = async (
     image: token.image,
     dateTime: token.dateTime,
   });
+};
+
+export const updateToken = async ({
+  tokenAddress,
+  fid,
+  username,
+  displayName,
+  profileImage,
+}: {
+  tokenAddress: string;
+  fid: number;
+  username: string;
+  displayName: string;
+  profileImage: string;
+}) => {
+  const requestedBy = JSON.stringify({
+    fid,
+    username,
+    displayName,
+    profileImage,
+  });
+  await db
+    .update(tokenTable)
+    .set({ requestedBy })
+    .where(eq(tokenTable.address, tokenAddress));
 };

@@ -1,8 +1,9 @@
+import { HTTPError } from "ky";
+import { getAddress } from "viem";
 import { v4 as uuidv4 } from "uuid";
 import { Request, Response } from "express";
-import { HTTPError } from "ky";
-import { type Cast } from "@neynar/nodejs-sdk/build/neynar-api/v2/index.js";
 import { BrianSDK } from "@brian-ai/sdk";
+import { type Cast } from "@neynar/nodejs-sdk/build/neynar-api/v2/index.js";
 
 import { env } from "../../env.js";
 import {
@@ -11,6 +12,7 @@ import {
   replyWithError,
   replyWithSuccess,
   saveBrianRequest,
+  updateToken,
 } from "../../utils/index.js";
 import { Channel } from "../../schemas/index.js";
 import { customAgent } from "../../utils/custom-agent.js";
@@ -57,7 +59,9 @@ export const farcasterHandler = async (req: Request, res: Response) => {
       })
       .filter((url) => url !== null);
 
-    logger.info(`received cast ${hash}: text ${text} img ${imageUrls[0]}`);
+    logger.info(
+      `received cast ${hash}: text ${text} img ${imageUrls.length > 0 ? imageUrls[0] : ""}`
+    );
 
     if (text.match(regexPattern) === null) {
       logger.error(
@@ -125,14 +129,23 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         brianResponse: JSON.stringify(responseFormatted),
         grokResponse: null,
         redisOperationId,
-        tokenAddress: null,
+        tokenAddress: responseFormatted.tokenAddress ?? "",
       });
+      if (responseFormatted.tokenAddress) {
+        await updateToken({
+          tokenAddress: getAddress(responseFormatted.tokenAddress),
+          fid: author.fid,
+          username: author.username,
+          displayName: author.display_name ?? "",
+          profileImage: author.pfp_url ?? "",
+        });
+      }
       await redisClient.set(redisOperationId, JSON.stringify({}));
 
       // Ask openai to generate a message for the frame
       replyWithSuccess(Channel.Farcaster, hash, responseFormatted.message, [
         {
-          url: `${env.BRIANKER_FRAME_HANDLER_URL}/frames/brian-tx?id=${redisOperationId}`,
+          url: `${env.BRIANKER_FRAME_HANDLER_URL}/token/${responseFormatted.tokenAddress ?? ""}`,
         },
       ]);
 

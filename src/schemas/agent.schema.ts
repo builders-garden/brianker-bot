@@ -21,6 +21,8 @@ export const createCryptoSchema = z.object({
   fid: z.number().describe("The fid of the user requesting the token"),
 });
 
+export type CreateCryptoSchema = z.infer<typeof createCryptoSchema>;
+
 // https://js.langchain.com/docs/how_to/structured_output/
 export const responseFormatterSchema = z.object({
   message: z.string().describe("The message to return to the user"),

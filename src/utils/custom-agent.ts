@@ -3,11 +3,11 @@ import { ChatMessageHistory } from "langchain/stores/message/in_memory";
 import { RunnableWithMessageHistory } from "@langchain/core/runnables";
 import { createToolCallingAgent, AgentExecutor } from "langchain/agents";
 import { DynamicStructuredTool } from "langchain/tools";
-import { z } from "zod";
 import { ChatOpenAI } from "@langchain/openai";
+import { getAddress } from "viem";
 
 import { saveToken } from "../utils/index.js";
-import { createCryptoSchema } from "../schemas/index.js";
+import { CreateCryptoSchema, createCryptoSchema } from "../schemas/index.js";
 import { deployTokenContract } from "./viem.js";
 import { LanguageModelLike } from "@langchain/core/language_models/base";
 
@@ -34,7 +34,7 @@ const createCryptoTool = new DynamicStructuredTool({
     imageUrl,
     dateTime,
     fid,
-  }: z.infer<typeof createCryptoSchema>) => {
+  }: CreateCryptoSchema) => {
     try {
       console.info(
         `Creating coin ${name} ${ticker} ${imageUrl} ${dateTime} requested by fid ${fid}`
@@ -55,10 +55,15 @@ const createCryptoTool = new DynamicStructuredTool({
       console.info(`Token contract deployed with address: ${tokenAddress}`);
 
       saveToken({
-        address: tokenAddress,
+        address: getAddress(tokenAddress),
         name,
         ticker,
-        requestedBy: fid || 0,
+        requestedBy: JSON.stringify({
+          fid: fid,
+          username: "",
+          displayName: "",
+          profileImage: "",
+        }),
         dateTime: startTime.toISOString(),
         image: imageUrl || "",
       });
