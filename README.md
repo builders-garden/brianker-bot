@@ -1,6 +1,13 @@
-# 🤖 briannah bot
+# 🤖 Briannah bot
 
 this repository contains the code for the powerful **briannah bot**.
+
+## Complementary Repos 
+
+[Briannah - Frontend](https://github.com/mmatteo23/brianker-fe)
+
+[Briannah - V4 Contracts](https://github.com/builders-garden/brianker-contracts)
+
 
 ## 📋 features
 
