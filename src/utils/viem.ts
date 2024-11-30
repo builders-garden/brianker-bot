@@ -86,7 +86,7 @@ export const deployTokenContract = async ({
   startTime: Date;
   chain: string;
 }) => {
-  const startTimeInEpoch = startTime.getTime();
+  const startTimeInEpoch = startTime.getTime() / 1000; // this getTime always returns the time in milliseconds, but we need it in seconds
 
   try {
     const chainToUse = getChain(chain);
