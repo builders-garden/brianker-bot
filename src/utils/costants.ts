@@ -15,7 +15,7 @@ export const SUPPORTED_CHAINS = [
 export const brainkerFactory = {
   address: {
     [sepolia.id]: "0xec0ddA4eDc7C130f4EDc08b8188D0daD658488c0",
-    [baseSepolia.id]: "0xec0ddA4eDc7C130f4EDc08b8188D0daD658488c0",
+    [baseSepolia.id]: "0x50e8CED6ca2FA2840827b7DcC748C775277a48C0",
     [unichainSepolia.id]: "0xec0ddA4eDc7C130f4EDc08b8188D0daD658488c0",
     [optimismSepolia.id]: "0xec0ddA4eDc7C130f4EDc08b8188D0daD658488c0",
   } as Record<number, `0x${string}`>,

@@ -7,11 +7,16 @@ import { ChatOpenAI } from "@langchain/openai";
 import { getAddress } from "viem";
 
 import { saveToken } from "../utils/index.js";
-import { CreateCryptoSchema, createCryptoSchema } from "../schemas/index.js";
+import {
+  CreateCryptoSchema,
+  createCryptoSchema,
+  WhoAmISchema,
+  whoAmISchema,
+} from "../schemas/index.js";
 import { deployTokenContract } from "./viem.js";
 import { LanguageModelLike } from "@langchain/core/language_models/base";
 
-export const defaultInstructions = `You are Brianker, a a web3 assistant to help users launch new tokens easily. 
+export const defaultInstructions = `You are Briannah, a a web3 assistant to help users launch new tokens easily. 
 Only extract relevant information from the text. 
 If you do not know the value of an attribute asked to extract, return null for the attribute's value. 
 
@@ -21,7 +26,11 @@ Respond only in valid JSON. The JSON object you return should match the followin
 \`\`\` 
 
 Where message is a string, tokenAddress is a string, and chain is a string.
-You know all the web3 memes, in the message field lightly make fun of the crypto the user just created using a sarcastic tone.`;
+You know all the web3 memes, in the message field lightly make fun of the crypto the user just created using a sarcastic tone.
+
+If the user asks you who you are, you should respond with the following message:
+"Hi @username, I'm Briannah, a web3 assistant to help users launch new tokens easily, using this message format:
+"Hey @briannah deploy a new token with name <name> and ticker <ticker> and attach an image to the cast."`;
 
 const createCryptoTool = new DynamicStructuredTool({
   name: "deploy_token",
@@ -87,6 +96,21 @@ const createCryptoTool = new DynamicStructuredTool({
   },
 });
 
+const whoAmITool = new DynamicStructuredTool({
+  name: "whoami",
+  description:
+    "this tool is used to show users who is Briannah and what can Briannah do.",
+  schema: whoAmISchema,
+  func: async ({ username }: WhoAmISchema) => {
+    return JSON.stringify({
+      message: `Hi ${username}, I'm Briannah, a web3 assistant to help users launch new tokens easily, using this message format:
+      "Hey @briannah deploy a new token with name <name> and ticker <ticker>" and dont forget to attach an image to the cast.`,
+      tokenAddress: null,
+      chain: "baseSepolia",
+    });
+  },
+});
+
 export const createCustomAgent = async ({
   llm,
   instructions,
@@ -94,7 +118,7 @@ export const createCustomAgent = async ({
   llm: LanguageModelLike;
   instructions?: string;
 }) => {
-  const tools = [createCryptoTool];
+  const tools = [createCryptoTool, whoAmITool];
 
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", instructions || defaultInstructions],
@@ -112,7 +136,7 @@ export const createCustomAgent = async ({
   const runnable = new AgentExecutor({
     agent,
     tools,
-    verbose: true,
+    verbose: false,
     callbacks: [],
   });
 

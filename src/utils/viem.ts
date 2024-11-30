@@ -26,6 +26,7 @@ const account = privateKeyToAccount(env.PRIVATE_KEY as `0x${string}`);
 
 const getChain = (chain: string): Chain => {
   let chainToUse: Chain;
+  return baseSepolia;
   if (
     chain === "mainnet" ||
     chain === mainnet.id.toString() ||

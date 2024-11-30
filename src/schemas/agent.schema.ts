@@ -59,3 +59,11 @@ export const responseFormatterSchema = z.object({
 });
 
 export type ResponseFormatterSchema = z.infer<typeof responseFormatterSchema>;
+
+export const whoAmISchema = z.object({
+  username: z
+    .string()
+    .describe("The username of the user requesting the information"),
+});
+
+export type WhoAmISchema = z.infer<typeof whoAmISchema>;

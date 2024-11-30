@@ -25,6 +25,44 @@ const brianSdk = new BrianSDK({
 
 const regexPattern = /@briannah/g;
 
+export function hasCauseProperty(
+  error: any
+): error is { cause: { error?: string } } {
+  return error && typeof error === "object" && "cause" in error;
+}
+
+const extractJsonFromOutput = (text: string) => {
+  // Define the regular expression pattern to match JSON blocks
+  const pattern = /```json\s*((.|\n)*?)\s*```/gs;
+
+  // Find all non-overlapping matches of the pattern in the string
+  const matches = pattern.exec(text);
+  console.log("json matches", matches);
+
+  if (matches && matches[1]) {
+    try {
+      return JSON.parse(matches[1].trim());
+    } catch (error) {
+      logger.error(`Failed to parse: ${text}`);
+      return {
+        message: `An error occured parsing the response, try again...`,
+        tokenAddress: null,
+        chain: "baseSepolia",
+      };
+    }
+  } else {
+    try {
+      return JSON.parse(text);
+    } catch (e) {}
+    logger.error(`No JSON found in: ${text}`);
+    return {
+      message: `An error occured, try again...`,
+      tokenAddress: null,
+      chain: "baseSepolia",
+    };
+  }
+};
+
 export const farcasterHandler = async (req: Request, res: Response) => {
   const redisOperationId = uuidv4();
   try {
@@ -86,14 +124,6 @@ export const farcasterHandler = async (req: Request, res: Response) => {
       return;
     }
 
-    // Getting the author's address
-    // const originWallet =
-    //   author.verified_addresses &&
-    //   author.verified_addresses.eth_addresses &&
-    //   author.verified_addresses.eth_addresses.length > 0
-    //     ? author.verified_addresses?.eth_addresses[0]
-    //     : author.custody_address;
-
     try {
       // Use brian to extract the parameters
       const { completion } = await brianSdk.extract({
@@ -121,12 +151,6 @@ export const farcasterHandler = async (req: Request, res: Response) => {
         { configurable: { sessionId: author.fid } }
       );
       const responseFormatted = extractJsonFromOutput(langchainResponse.output);
-      console.log(
-        "langchainResponse",
-        langchainResponse,
-        "\n\n responseFormatted",
-        responseFormatted
-      );
       saveBrianRequest({
         status: "ok",
         errorMessage: null,
@@ -166,6 +190,20 @@ export const farcasterHandler = async (req: Request, res: Response) => {
             errorMessage = cause.error;
           }
         }
+      }
+      try {
+        const whoAmIResponse = await customAgent.invoke(
+          {
+            input: `Hi Briannah I'm @${author.username}, what can you do?`,
+          },
+          { configurable: { sessionId: author.fid } }
+        );
+        const whoAmIFormatted = extractJsonFromOutput(whoAmIResponse.output);
+        if (whoAmIFormatted.message) {
+          errorMessage = whoAmIFormatted.message;
+        }
+      } catch (err) {
+        logger.error(`error getting whoAmI ${JSON.stringify(err)}`);
       }
       logger.error(`Error calling brian endpoint: ${JSON.stringify(e)}`);
       replyWithError(Channel.Farcaster, hash, errorMessage);
@@ -209,43 +247,5 @@ export const farcasterHandler = async (req: Request, res: Response) => {
       });
     }
     return;
-  }
-};
-
-export function hasCauseProperty(
-  error: any
-): error is { cause: { error?: string } } {
-  return error && typeof error === "object" && "cause" in error;
-}
-
-const extractJsonFromOutput = (text: string) => {
-  // Define the regular expression pattern to match JSON blocks
-  const pattern = /```json\s*((.|\n)*?)\s*```/gs;
-
-  // Find all non-overlapping matches of the pattern in the string
-  const matches = pattern.exec(text);
-  console.log("json matches", matches);
-
-  if (matches && matches[1]) {
-    try {
-      return JSON.parse(matches[1].trim());
-    } catch (error) {
-      logger.error(`Failed to parse: ${text}`);
-      return {
-        message: `An error occured parsing the response, try again...`,
-        tokenAddress: null,
-        chain: "baseSepolia",
-      };
-    }
-  } else {
-    try {
-      return JSON.parse(text);
-    } catch (e) {}
-    logger.error(`No JSON found in: ${text}`);
-    return {
-      message: `An error occured, try again...`,
-      tokenAddress: null,
-      chain: "baseSepolia",
-    };
   }
 };
